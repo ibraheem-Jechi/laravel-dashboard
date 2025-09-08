@@ -8,6 +8,13 @@
 <body class="antialiased bg-gray-100 text-gray-800">
 
     <div class="min-h-screen flex flex-col justify-center items-center">
+        <form method="POST" action="{{ route('logout') }}">
+    @csrf
+    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+        Logout
+    </button>
+</form>
+
         <h1 class="text-5xl font-bold text-blue-600 mb-6">Welcome to Laravel 🚀</h1>
         <p class="text-lg text-gray-600 mb-8">
             You have successfully set up your Laravel application.
