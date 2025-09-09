@@ -3,18 +3,27 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProductController;
 
-Route::get('/', function () {
-    return view('welcome');
+// Routes that require authentication
+Route::middleware('auth')->group(function () {
+    // Dashboard / Welcome page (with products)
+    Route::get('/', [ProductController::class, 'welcome'])->name('welcome');
+
+    // Add new product
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+    // Logout
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 });
 
-// Register
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
+// Routes for guests (not logged in)
+Route::middleware('guest')->group(function () {
+    // Register
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
 
-// Login
-Route::get('/login', [LoginController::class, 'create'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
-
-// Logout (POST only)
-Route::post('/logout', [LoginController::class, 'destroy'])->name('logout')->middleware('auth');
+    // Login
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+});
